@@ -40,12 +40,12 @@ import social_securitys from './modules/social_securitys'
  */
 
 export const asyncRoutes = [
+  departments,
+  settings,
+  employees,
   permissions,
   approvals,
   attendances,
-  settings,
-  departments,
-  employees,
   salarys,
   social_securitys
 ]
