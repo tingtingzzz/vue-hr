@@ -23,7 +23,7 @@
 
 <script>
 import { getEmployeeSimple } from '@/api/employees'
-import { addDepartments } from '@/api/departments'
+import { addDepartments, getDepartDetail, updateDepartments } from '@/api/departments'
 
 export default {
   name: 'DeptDialog',
@@ -31,6 +31,10 @@ export default {
     pid: {
       required: true,
       type: String
+    },
+    isEdit: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -45,10 +49,15 @@ export default {
     }
   },
   created() {
+    this.loadEmployee()
     this.loadDetail()
   },
   methods: {
     async loadDetail() {
+      const { data: res } = await getDepartDetail(this.pid)
+      this.form = res
+    },
+    async loadEmployee() {
       const { data: res } = await getEmployeeSimple()
       this.list = res
       console.log(res)
@@ -59,8 +68,12 @@ export default {
       await addDepartments(d)
       this.$emit('success')
     },
+    async doEdit() {
+      await updateDepartments(this.form)
+      this.$emit('success')
+    },
     hSubmit() {
-      this.doAdd()
+      this.isEdit ? this.doEdit() : this.doAdd()
     }
   }
 }

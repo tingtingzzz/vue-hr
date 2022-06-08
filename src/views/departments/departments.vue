@@ -42,8 +42,8 @@
                         操作<i class="el-icon-arrow-down" />
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="hAdd(data.id)">添加子部门</el-dropdown-item>
-                        <el-dropdown-item>编辑部门</el-dropdown-item>
+                        <el-dropdown-item @click.native="hAdd(data.id)">添加部门</el-dropdown-item>
+                        <el-dropdown-item @click.native="hEdit(data.id)">编辑部门</el-dropdown-item>
                         <el-dropdown-item>删除部门</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -57,12 +57,12 @@
       </el-card>
     </div>
     <el-dialog
-      title="添加部门"
+      :title="isEdit ? '编辑部门' : '添加部门'"
       :visible.sync="showDialog"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <dept-dialog :pid="pid" @success="hSuccess" />
+      <dept-dialog :pid="pid" :is-edit="isEdit" @success="hSuccess" />
     </el-dialog>
   </div>
 </template>
@@ -78,6 +78,7 @@ export default {
 
   data() {
     return {
+      isEdit: false,
       pid: '',
       showDialog: false,
       data: [],
@@ -91,9 +92,15 @@ export default {
     this.loadDepartments()
   },
   methods: {
+    hEdit(id) {
+      this.isEdit = true
+      this.showDialog = true
+      this.pid = id
+    },
     hAdd(id) {
       this.showDialog = true
       this.pid = id
+      this.isEdit = false
     },
     handleNodeClick(data) {
       console.log(data)
