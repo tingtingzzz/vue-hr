@@ -42,7 +42,7 @@
                         操作<i class="el-icon-arrow-down" />
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="showDialog=true">添加子部门</el-dropdown-item>
+                        <el-dropdown-item @click.native="hAdd(data.id)">添加子部门</el-dropdown-item>
                         <el-dropdown-item>编辑部门</el-dropdown-item>
                         <el-dropdown-item>删除部门</el-dropdown-item>
                       </el-dropdown-menu>
@@ -62,7 +62,7 @@
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <dept-dialog />
+      <dept-dialog :pid="pid" @success="hSuccess" />
     </el-dialog>
   </div>
 </template>
@@ -78,6 +78,7 @@ export default {
 
   data() {
     return {
+      pid: '',
       showDialog: false,
       data: [],
       defaultProps: {
@@ -90,6 +91,10 @@ export default {
     this.loadDepartments()
   },
   methods: {
+    hAdd(id) {
+      this.showDialog = true
+      this.pid = id
+    },
     handleNodeClick(data) {
       console.log(data)
     },
@@ -98,6 +103,11 @@ export default {
       console.log(res)
       res.depts.shift() // 删除数组第一个
       this.data = arrayToTree(res.depts)
+    },
+    hSuccess() {
+      this.showDialog = false
+      //  重新发送请求
+      this.loadDepartments()
     }
   }
 }
