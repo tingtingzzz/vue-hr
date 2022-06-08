@@ -115,3 +115,36 @@ export function param2Obj(url) {
   })
   return obj
 }
+// 把平铺的数组转成树状结构
+export function arrayToTree(list) {
+  // 1. 定义两个中间变量
+  const map = []// 存储映射关系
+  const treeList = []// 最终要产出的树状数据的数组
+  // 2. 建立一个映射关系，并给每个元素补充children属性.
+  // 映射关系: 目的是让我们能通过id快速找到对应的元素
+  // 补充children：让后边的计算更方便
+  list.forEach(item => {
+    if (!item.children) {
+      item.children = []
+    }
+    map[item.id] = item
+    // console.log(map)
+  })
+  // 3. 循环处理每个元素
+  list.forEach(item => {
+    // 对于每一个元素来说，先找它的上级
+    //    如果能找到，说明它有上级，则要把它添加到上级的children中去
+    //    如果找不到，说明它没有上级，直接添加到 treeList
+    const pid = map[item.pid]
+
+    if (pid) {
+      // 如果存在则表示item不是最顶层的数据
+      pid.children.push(item)
+    } else {
+      // 如果不存在 则是顶层数据
+      treeList.push(item)
+    }
+  })
+  // 返回出去
+  return treeList
+}

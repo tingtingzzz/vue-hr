@@ -42,7 +42,9 @@
                         操作<i class="el-icon-arrow-down" />
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>添加子部门</el-dropdown-item>
+                        <el-dropdown-item @click.native="showDialog=true">添加子部门</el-dropdown-item>
+                        <el-dropdown-item>编辑部门</el-dropdown-item>
+                        <el-dropdown-item>删除部门</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </el-col>
@@ -54,16 +56,29 @@
         </el-tree>
       </el-card>
     </div>
+    <el-dialog
+      title="添加部门"
+      :visible.sync="showDialog"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+    >
+      <dept-dialog />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
 import { getDepartments } from '@/api/departments'
+import { arrayToTree } from '@/utils'
+import DeptDialog from '@/views/departments/deptDialog'
 
 export default {
+  components: { DeptDialog },
+
   data() {
     return {
+      showDialog: false,
       data: [],
       defaultProps: {
         children: 'children',
@@ -82,7 +97,7 @@ export default {
       const { data: res } = await getDepartments()
       console.log(res)
       res.depts.shift() // 删除数组第一个
-      this.data = res.depts
+      this.data = arrayToTree(res.depts)
     }
   }
 }
