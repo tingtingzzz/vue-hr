@@ -50,7 +50,6 @@ export default {
   },
   created() {
     this.loadEmployee()
-    this.loadDetail()
   },
   methods: {
     async loadDetail() {
