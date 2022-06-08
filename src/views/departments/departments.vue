@@ -25,7 +25,7 @@
             </el-row>
           </el-col>
         </el-row>
-        <el-tree :data="data" :props="defaultProps" :default-expand-all="true" @node-click="handleNodeClick">
+        <el-tree :data="data" :props="defaultProps" :default-expand-all="true">
           <template slot-scope="{data}">
             <el-row type="flex" justify="space-between" align="middle" style="height: 40px; width:100%">
               <el-col :span="20">
@@ -44,7 +44,7 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="hAdd(data.id)">添加部门</el-dropdown-item>
                         <el-dropdown-item @click.native="hEdit(data.id)">编辑部门</el-dropdown-item>
-                        <el-dropdown-item>删除部门</el-dropdown-item>
+                        <el-dropdown-item v-if="data.children.length===0" @click.native="hDel(data.id)">删除部门</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </el-col>
@@ -69,7 +69,7 @@
 
 <script>
 
-import { getDepartments } from '@/api/departments'
+import { delDepartment, getDepartments } from '@/api/departments'
 import { arrayToTree } from '@/utils'
 import DeptDialog from '@/views/departments/deptDialog'
 
@@ -100,17 +100,18 @@ export default {
         this.$refs.refdialog.loadDetail()
       })
     },
+    // 添加
     hAdd(id) {
       this.showDialog = true
       this.pid = id
       this.isEdit = false
     },
-    handleNodeClick(data) {
-      console.log(data)
-    },
+    // handleNodeClick(data) {
+    //   console.log(data)
+    // },
     async loadDepartments() {
       const { data: res } = await getDepartments()
-      console.log(res)
+      // console.log(res)
       res.depts.shift() // 删除数组第一个
       this.data = arrayToTree(res.depts)
     },
@@ -118,6 +119,25 @@ export default {
       this.showDialog = false
       //  重新发送请求
       this.loadDepartments()
+    },
+    // 删除
+    hDel(id) {
+      // 弹层询问，是否退出
+      this.$confirm('你确定要删除嘛?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.doDel(id)
+      }).catch(() => {
+        this.$message.success('取消了')
+      })
+    },
+    async doDel(id) {
+      const res = await delDepartment(id)
+      if (res.code !== 10000) return this.$message.error(res.message)
+      this.$message.success(res.message)
+      await this.loadDepartments()
     }
   }
 }

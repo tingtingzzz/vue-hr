@@ -40,16 +40,17 @@ export default {
   data() {
     return {
       form: {
-        name: '', // 部门名称
-        code: '', // 部门编码
-        manager: '', // 部门管理者
-        introduce: '' // 部门介绍
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
       },
       list: []
     }
   },
   created() {
     this.loadEmployee()
+    // this.loadDetail()
   },
   methods: {
     async loadDetail() {
@@ -72,6 +73,7 @@ export default {
       this.$emit('success')
     },
     hSubmit() {
+      // 选择调用那个
       this.isEdit ? this.doEdit() : this.doAdd()
     }
   }
