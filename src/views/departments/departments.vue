@@ -62,7 +62,7 @@
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <dept-dialog ref="refdialog" :pid="pid" :is-edit="isEdit" @success="hSuccess" />
+      <dept-dialog ref="refdialog" :pid="pid" :is-edit="isEdit" :origin-list="originList" @success="hSuccess" />
     </el-dialog>
   </div>
 </template>
@@ -78,6 +78,7 @@ export default {
 
   data() {
     return {
+      originList: [],
       isEdit: false,
       pid: '',
       showDialog: false,
@@ -113,6 +114,14 @@ export default {
       const { data: res } = await getDepartments()
       // console.log(res)
       res.depts.shift() // 删除数组第一个
+      this.originList = res.depts.map(item => {
+        return {
+          name: item.name,
+          pid: item.pid,
+          id: item.id,
+          code: item.code
+        }
+      })
       this.data = arrayToTree(res.depts)
     },
     hSuccess() {

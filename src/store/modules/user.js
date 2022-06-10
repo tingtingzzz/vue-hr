@@ -5,15 +5,15 @@ export default {
   namespaced: true,
   state: () => {
     return {
-      //保存token
+      // 保存token
       token: getToken() || '',
       userInfo: {}
     }
   },
   mutations: {
-    //定义修改token的方法
+    // 定义修改token的方法
     setToken(state, newToken) {
-      //保存token
+      // 保存token
       state.token = newToken
       //  持久化
       setToken(newToken)
