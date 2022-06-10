@@ -16,7 +16,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="small" @click="hSubmit">确定</el-button>
-      <el-button size="small">取消</el-button>
+      <el-button size="small" @click="hCancel">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -47,7 +47,7 @@ export default {
       if (this.isEdit) {
         const obj = this.originList.find(item => item.id === this.id)
         const pid = obj.pid
-        existNameList = this.originList.filter(item => item.pid === pid && item.id !== this.id).map(item => item.name)
+        existNameList = this.originList.filter(item => item.pid === pid && item.pid !== this.id).map(item => item.name)
       }
       console.log('被占用的名字列表', existNameList)
       if (existNameList.includes(value)) {
@@ -131,6 +131,12 @@ export default {
         this.isEdit ? this.doEdit() : this.doAdd()
         this.$message.success('成功')
       })
+    },
+    hCancel() {
+      this.$emit('close')
+    },
+    resetForm() {
+      this.$refs.deptForm.resetFields()
     }
   }
 }

@@ -61,8 +61,9 @@
       :visible.sync="showDialog"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
+      @close="hDialogClose"
     >
-      <dept-dialog ref="refdialog" :pid="pid" :is-edit="isEdit" :origin-list="originList" @success="hSuccess" />
+      <dept-dialog ref="refdialog" :pid="pid" :is-edit="isEdit" :origin-list="originList" @success="hSuccess" @close="hClose" />
     </el-dialog>
   </div>
 </template>
@@ -100,6 +101,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.refdialog.loadDetail()
       })
+    },
+    hDialogClose() {
+      this.$refs.refdialog.resetForm()
+    },
+    // 取消
+    hClose() {
+      this.showDialog = false
     },
     // 添加
     hAdd(id) {
