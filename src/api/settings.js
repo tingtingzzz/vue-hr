@@ -33,3 +33,16 @@ export function addRole(data) {
     data
   })
 }
+
+/**
+ * @description: 编辑角色
+ * @param {*} data
+ * @return {*}
+ */
+export function editRole(data) {
+  return request({
+    url: `/sys/role/${data.id}`,
+    method: 'put',
+    data
+  })
+}
