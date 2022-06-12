@@ -45,9 +45,9 @@ export default {
     const validName = (rule, value, callback) => {
       let existNameList = this.originList.filter(item => item.pid === this.pid).map(item => item.name)
       if (this.isEdit) {
-        const obj = this.originList.find(item => item.id === this.id)
+        const obj = this.originList.find(item => item.id === this.pid)
         const pid = obj.pid
-        existNameList = this.originList.filter(item => item.pid === pid && item.pid !== this.id).map(item => item.name)
+        existNameList = this.originList.filter(item => item.pid === pid && item.id !== this.pid).map(item => item.name)
       }
       console.log('被占用的名字列表', existNameList)
       if (existNameList.includes(value)) {

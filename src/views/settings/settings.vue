@@ -6,7 +6,7 @@
           <!-- 放置页签 -->
           <el-tab-pane label="角色管理">
             <!-- 新增角色按钮 -->
-            <el-row style="height:60px">
+            <el-row style="height: 60px">
               <el-button
                 icon="el-icon-plus"
                 size="small"
@@ -22,13 +22,26 @@
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button size="small" type="success">分配权限</el-button>
-                  <el-button size="small" type="primary" @click="hEdit(scope.row)">编辑</el-button>
-                  <el-button size="small" type="danger" @click="hDel(scope.row.id)">删除</el-button>
+                  <el-button
+                    size="small"
+                    type="primary"
+                    @click="hEdit(scope.row)"
+                  >编辑</el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    @click="hDel(scope.row.id)"
+                  >删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
 
-            <el-row type="flex" justify="center" align="middle" style="height: 60px">
+            <el-row
+              type="flex"
+              justify="center"
+              align="middle"
+              style="height: 60px"
+            >
               <!-- 分页组件 -->
               <el-pagination
                 :total="total"
@@ -45,13 +58,18 @@
       </el-card>
       <!-- 新增弹框 -->
       <el-dialog
-        :title="isEdit ? '添加': '编辑' "
+        :title="isEdit ? '添加' : '编辑'"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :visible.sync="showDialog"
         @close="qwe"
       >
-        <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="100px">
+        <el-form
+          ref="roleForm"
+          :model="roleForm"
+          :rules="rules"
+          label-width="100px"
+        >
           <el-form-item label="角色名称" prop="name">
             <el-input v-model="roleForm.name" />
           </el-form-item>
@@ -62,8 +80,12 @@
         <!-- 底部 -->
         <el-row slot="footer" type="flex" justify="center">
           <el-col :span="6">
-            <el-button size="small" @click="showDialog=false">取消</el-button>
-            <el-button size="small" type="primary" @click="hSubmit">确定</el-button>
+            <el-button size="small" @click="showDialog = false">取消</el-button>
+            <el-button
+              size="small"
+              type="primary"
+              @click="hSubmit"
+            >确定</el-button>
           </el-col>
         </el-row>
       </el-dialog>
@@ -72,7 +94,6 @@
 </template>
 
 <script>
-
 import { addRole, deleteRole, editRole, getRoles } from '@/api/settings'
 
 export default {
@@ -98,9 +119,11 @@ export default {
     this.logadRoles()
   },
   methods: {
-    // 关闭
+    // 重置表单
     qwe() {
-      this.$refs.roleForm.resetFields()
+      this.$nextTick(() => {
+        this.$refs.roleForm.resetFields()
+      })
     },
     // 编辑
     hEdit(data) {
@@ -110,7 +133,7 @@ export default {
     },
     // 确定
     hSubmit() {
-      this.$refs.roleForm.validate(valid => {
+      this.$refs.roleForm.validate((valid) => {
         if (!valid) return this.$message.error('添加失败')
         this.isEdit ? this.doAdd() : this.doEdit()
       })
@@ -121,6 +144,7 @@ export default {
         await editRole(this.roleForm)
         this.$message.success('编辑成功')
         this.showDialog = false
+        await this.logadRoles()
       } catch (e) {
         console.log(e)
       }
@@ -138,7 +162,7 @@ export default {
         console.log(e)
       }
     },
-    async  hAdd() {
+    async hAdd() {
       // await addRole({ name: 'ikun', description: '保安' })
       // this.$message.success('添加成功')
       // await this.logadRoles()
@@ -155,15 +179,20 @@ export default {
       await this.logadRoles()
     },
     hDel(id) {
-      this.$confirm('确认要删除嘛', '提示').then(() => {
-        this.doDel(id)
-      }).catch(() => {
-        this.$message.error('取消了')
-      })
+      this.$confirm('确认要删除嘛', '提示')
+        .then(() => {
+          this.doDel(id)
+        })
+        .catch(() => {
+          this.$message.error('取消了')
+        })
     },
     async logadRoles() {
       try {
-        const { data: res } = await getRoles({ page: this.page, pagesize: this.pagesize })
+        const { data: res } = await getRoles({
+          page: this.page,
+          pagesize: this.pagesize
+        })
         this.roles = res.rows
         this.total = res.total
         // console.log(res)
@@ -183,6 +212,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
