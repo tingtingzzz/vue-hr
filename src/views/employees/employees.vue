@@ -3,7 +3,7 @@
     <div class="app-container">
       <page-tools title="总数">
         <el-button type="warning" size="small" @click="$router.push('/import')">excel导入</el-button>
-        <el-button type="danger" size="small">excel导出</el-button>
+        <el-button type="danger" size="small" @click="daochu">excel导出</el-button>
         <el-button type="primary" size="small" @click="showDialog=true">新增员工</el-button>
       </page-tools>
     </div>
@@ -77,6 +77,26 @@ export default {
     this.loadEmployee()
   },
   methods: {
+    formatData(rows) {
+      const data = rows.map(obj => { return Object.values(obj) })
+      const header = Object.keys(rows[0])
+      return { header, data }
+    },
+    async daochu() {
+      const { data: res } = await getEmployeeList({ page: this.page, size: this.size })
+      const { header, data } = this.formatData(res.rows)
+      import('@/vendor/Export2Excel').then(excel => {
+        // excel表示导入的模块对象
+        console.log(excel)
+        excel.export_json_to_excel({
+          header, // 表头 必填
+          data, // 具体数据 必填
+          filename: 'excel-list', // 文件名称
+          autoWidth: true, // 宽度是否自适应
+          bookType: 'xlsx' // 生成的文件类型
+        })
+      })
+    },
     hclose() {
       this.$refs.qwe.resetForm()
     },
