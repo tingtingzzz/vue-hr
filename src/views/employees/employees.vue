@@ -22,10 +22,10 @@
         <el-table-column label="入职时间" prop="timeOfEntry" sortable />
         <el-table-column label="账户状态" />
         <el-table-column label="操作" width="280">
-          <template>
+          <template slot-scope="scope">
             <el-button type="info" round size="mini">查看</el-button>
             <el-button type="primary" round>分配角色</el-button>
-            <el-button type="success" round>删除</el-button>
+            <el-button type="success" round @click="hDel(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -46,7 +46,7 @@
 </template>
 <script>
 import PageTools from '@/components/PageTools'
-import { getEmployeeList } from '@/api/employees'
+import { delEmployee, getEmployeeList } from '@/api/employees'
 import { TYPE_MAP } from '@/constant'
 
 export default {
@@ -65,6 +65,26 @@ export default {
     this.loadEmployee()
   },
   methods: {
+    // 删除
+    async doDel(id) {
+      try {
+        await delEmployee(id)
+        if (this.employee.length === 1 && this.page > 1) {
+          this.page--
+        }
+        this.$message.success('删除成功')
+        await this.loadEmployee()
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    hDel(id) {
+      this.$confirm('确定要删除吗', '提示').then(() => {
+        this.doDel(id)
+      }).catch(() => {
+        this.$message.error('shanchushibai')
+      })
+    },
     hCurrentChange(c) {
       this.page = c
       this.loadEmployee()
