@@ -56,40 +56,40 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
-      <!-- 新增弹框 -->
-      <el-dialog
-        :title="isEdit ? '添加' : '编辑'"
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        :visible.sync="showDialog"
-        @close="qwe"
-      >
-        <el-form
-          ref="roleForm"
-          :model="roleForm"
-          :rules="rules"
-          label-width="100px"
-        >
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="roleForm.name" />
-          </el-form-item>
-          <el-form-item label="角色描述" prop="description">
-            <el-input v-model="roleForm.description" />
-          </el-form-item>
-        </el-form>
-        <!-- 底部 -->
-        <el-row slot="footer" type="flex" justify="center">
-          <el-col :span="6">
-            <el-button size="small" @click="showDialog = false">取消</el-button>
-            <el-button
-              size="small"
-              type="primary"
-              @click="hSubmit"
-            >确定</el-button>
-          </el-col>
-        </el-row>
-      </el-dialog>
     </div>
+    <!-- 新增弹框 -->
+    <el-dialog
+      :title="isEdit ? '添加' : '编辑'"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :visible.sync="showDialog"
+      @close="hClose"
+    >
+      <el-form
+        ref="roleForm"
+        :model="roleForm"
+        :rules="rules"
+        label-width="100px"
+      >
+        <el-form-item label="角色名称" prop="name">
+          <el-input v-model="roleForm.name" />
+        </el-form-item>
+        <el-form-item label="角色描述" prop="description">
+          <el-input v-model="roleForm.description" />
+        </el-form-item>
+      </el-form>
+      <!-- 底部 -->
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button size="small" @click="showDialog = false">取消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="hSubmit"
+          >确定</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,9 +120,11 @@ export default {
   },
   methods: {
     // 重置表单
-    qwe() {
+    hClose() {
       this.$nextTick(() => {
-        this.$refs.roleForm.resetFields()
+        this.$refs.roleForm.resetFields() // 重置表单
+        this.roleForm.name = ''
+        this.roleForm.description = ''
       })
     },
     // 编辑
@@ -197,7 +199,7 @@ export default {
         this.total = res.total
         // console.log(res)
       } catch (e) {
-        this.$message.error(e)
+        console.log(e)
       }
     },
     hCurrentChange(c) {
@@ -206,6 +208,7 @@ export default {
     },
     handleSizeChange(c) {
       this.pagesize = c
+      this.page = 1
       this.logadRoles()
     }
   }
