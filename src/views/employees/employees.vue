@@ -8,17 +8,18 @@
       </page-tools>
     </div>
     <el-card style="margin-top: 10px">
-      <el-table border :data="employee">
+      <el-table border :data="employee" :default-sort="{prop:'timeOfEntry'}">
         <el-table-column label="序号" type="index" />
         <el-table-column label="姓名" prop="username" />
         <el-table-column label="工号" prop="workNumber" />
         <el-table-column label="聘用形式" prop="formOfEmployment">
           <template slot-scope="scope">{{
             format(scope.row.formOfEmployment)
-          }}</template>
+          }}
+          </template>
         </el-table-column>
         <el-table-column label="部门" prop="departmentName" />
-        <el-table-column label="入职时间" prop="timeOfEntry" />
+        <el-table-column label="入职时间" prop="timeOfEntry" sortable />
         <el-table-column label="账户状态" />
         <el-table-column label="操作" width="280">
           <template>
@@ -30,7 +31,15 @@
       </el-table>
       <!-- 分页组件 -->
       <el-row type="flex" justify="center" align="middle" style="height: 60px">
-        <el-pagination layout="prev, pager, next" />
+        <el-pagination
+          :total="total"
+          :page-sizes="[2,5,10,15]"
+          :page-size="size"
+          :current-page="page"
+          layout="total, prev, pager, next,sizes"
+          @current-change="hCurrentChange"
+          @size-change="handleSizeChange"
+        />
       </el-row>
     </el-card>
   </div>
@@ -47,16 +56,26 @@ export default {
   data() {
     return {
       employee: [],
-      total: ''
+      total: 0,
+      page: 1, // 当前页码
+      size: 2 //  每页几条
     }
   },
   created() {
     this.loadEmployee()
   },
   methods: {
+    hCurrentChange(c) {
+      this.page = c
+      this.loadEmployee()
+    },
+    handleSizeChange(c) {
+      this.size = c
+      this.loadEmployee()
+    },
     async loadEmployee() {
-      const { data: res } = await getEmployeeList({ page: 1, size: 10 })
-      console.log(res)
+      const { data: res } = await getEmployeeList({ page: this.page, size: this.size })
+      // console.log(res)
       this.total = res.total
       this.employee = res.rows
     },

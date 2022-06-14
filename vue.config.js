@@ -43,7 +43,7 @@ module.exports = {
       // http://localhost:9588/api/login -> http://localhost:3000/api/login
       '/api': {
         // target: 'http://192.168.71.189:3000' // 我们要代理的真实接口地址
-        target: 'http://192.168.71.102:3000'
+        target: 'http://192.168.71.105:3000'
       }
     }
   },
@@ -110,7 +110,7 @@ module.exports = {
                   test: /[\\/]node_modules[\\/]/,
                   priority: 10,
                   chunks: 'initial' // only package third parties that are
-                  // initially dependent
+                // initially dependent
                 },
                 elementUI: {
                   name: 'chunk-elementUI', // split elementUI into a single
@@ -118,7 +118,7 @@ module.exports = {
                   priority: 20, // the weight needs to be larger than libs and
                   // app or it will be packaged into libs or app
                   test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to
-                  // adapt to cnpm
+                // adapt to cnpm
                 },
                 commons: {
                   name: 'chunk-commons',
