@@ -4,7 +4,7 @@
       <page-tools title="总数">
         <el-button type="warning" size="small">excel导入</el-button>
         <el-button type="danger" size="small">excel导出</el-button>
-        <el-button type="primary" size="small">新增员工</el-button>
+        <el-button type="primary" size="small" @click="showDialog=true">新增员工</el-button>
       </page-tools>
     </div>
     <el-card style="margin-top: 10px">
@@ -42,29 +42,53 @@
         />
       </el-row>
     </el-card>
+    <el-dialog
+      title="添加员工"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :visible.sync="showDialog"
+      @close="hclose"
+    >
+      <emp-dialog ref="qwe" @success="hsuccess" @quxiao="hquxiao" />
+    </el-dialog>
   </div>
 </template>
 <script>
 import PageTools from '@/components/PageTools'
 import { delEmployee, getEmployeeList } from '@/api/employees'
 import { TYPE_MAP } from '@/constant'
+import EmpDialog from '@/views/employees/empDialog'
 
 export default {
   components: {
+    EmpDialog,
     PageTools
   },
   data() {
     return {
+      showDialog: false,
       employee: [],
       total: 0,
       page: 1, // 当前页码
-      size: 2 //  每页几条
+      size: 10 //  每页几条
     }
   },
   created() {
     this.loadEmployee()
   },
   methods: {
+    hclose() {
+      this.$refs.qwe.resetForm()
+    },
+    hquxiao() {
+      this.showDialog = false
+    },
+    hsuccess() {
+      this.showDialog = false
+      this.loadEmployee()
+      this.total++
+      this.page = Math.ceil(this.total / this.size)
+    },
     // 删除
     async doDel(id) {
       try {
