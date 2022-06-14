@@ -34,3 +34,12 @@ export function delEmployee(id) {
     url: `/sys/user/${id}`
   })
 }
+
+// 导入员工
+export function importEmployees(data) {
+  return request({
+    method: 'POST',
+    url: '/sys/user/batch',
+    data
+  })
+}

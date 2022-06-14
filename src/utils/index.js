@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -115,6 +115,7 @@ export function param2Obj(url) {
   })
   return obj
 }
+
 // 把平铺的数组转成树状结构
 export function arrayToTree(list) {
   // 1. 定义两个中间变量
@@ -147,4 +148,18 @@ export function arrayToTree(list) {
   })
   // 返回出去
   return treeList
+}
+
+// 把excel文件中的日期格式的内容转回成标准时间
+// https://blog.csdn.net/qq_15054679/article/details/107712966
+export function formatExcelDate(numb, format = '/') {
+  const time = new Date((numb - 25567) * 24 * 3600000 - 5 * 60 * 1000 - 43 * 1000 - 24 * 3600000 - 8 * 3600000)
+  time.setYear(time.getFullYear())
+  const year = time.getFullYear() + ''
+  const month = time.getMonth() + 1 + ''
+  const date = time.getDate() + ''
+  if (format && format.length === 1) {
+    return year + format + month + format + date
+  }
+  return year + (month < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
 }

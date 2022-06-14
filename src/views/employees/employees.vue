@@ -2,7 +2,7 @@
   <div class="employees-container">
     <div class="app-container">
       <page-tools title="总数">
-        <el-button type="warning" size="small">excel导入</el-button>
+        <el-button type="warning" size="small" @click="$router.push('/import')">excel导入</el-button>
         <el-button type="danger" size="small">excel导出</el-button>
         <el-button type="primary" size="small" @click="showDialog=true">新增员工</el-button>
       </page-tools>
