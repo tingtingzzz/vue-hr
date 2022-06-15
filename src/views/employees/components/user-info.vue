@@ -18,7 +18,7 @@
       <!-- 员工照片 -->
       <el-form-item label="员工头像">
         <!-- 放置上传图片 -->
-        <img>
+        <upload-img v-model="userInfo.staffPhoto" />
       </el-form-item>
 
       <!-- 保存个人信息 -->
@@ -38,7 +38,8 @@ export default {
     return {
       userInfo: {
         mobile: '',
-        timeOfEntry: ''
+        timeOfEntry: '',
+        staffPhoto: '' // 初始为空
       },
       rules: {
         mobile: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
