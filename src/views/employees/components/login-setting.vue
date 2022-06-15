@@ -30,39 +30,39 @@ export default {
         password: ''
       },
       rules: {
-        username: [{ required: true, message: '请输入名字', target: 'blur' }],
-        password: [{ required: true, message: '请输入密码', target: 'blur' }]
+        username: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空a', trigger: 'blur' }]
       }
     }
   },
   created() {
-    // 获取用某个用户的信息
     this.loadUserDetailById()
   },
   methods: {
+    // 获取数据
     async loadUserDetailById() {
       const { data: res } = await getUserDetailById(this.$route.query.id)
       // console.log(res)
       this.userInfo = res
     },
-    // 点击更新
-    hSubmit() {
-      this.$refs.userForm.validate(valid => {
-        if (!valid) return this.$message.error('请输入完整数据')
-        this.doEdit()
-      })
-    },
-    // 更新方法
+    //  点击更新方法
     async doEdit() {
       try {
         await saveUserDetailById(this.userInfo)
-        this.$message.success('更新成功')
+        this.$message.success('修改成功')
         this.$refs.userForm.resetFields()
         this.$router.push('/employees')
       } catch (e) {
         console.log(e)
-        this.$message.error('更新失败')
       }
+    },
+    // 点击更新
+    hSubmit() {
+      this.$refs.userForm.validate(valid => {
+        if (valid) {
+          this.doEdit()
+        }
+      })
     }
   }
 }
