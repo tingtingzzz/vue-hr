@@ -23,7 +23,8 @@
         <el-table-column label="账户状态" />
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
-            <el-button type="info" round size="mini">查看</el-button>
+            <el-button type="info" round size="mini" @click="$router.push('/employees/detail?id='+ scope.row.id)">查看
+            </el-button>
             <el-button type="primary" round>分配角色</el-button>
             <el-button type="success" round @click="hDel(scope.row.id)">删除</el-button>
           </template>
