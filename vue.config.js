@@ -43,7 +43,8 @@ module.exports = {
       // http://localhost:9588/api/login -> http://localhost:3000/api/login
       '/api': {
         // target: 'http://192.168.71.189:3000' // 我们要代理的真实接口地址
-        target: 'http://192.168.71.105:3000'
+        // target: 'http://192.168.71.105:3000'
+        target: 'http://192.168.123.112:3000'
       }
     }
   },

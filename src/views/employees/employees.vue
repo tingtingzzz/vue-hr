@@ -70,7 +70,7 @@ export default {
       employee: [],
       total: 0,
       page: 1, // 当前页码
-      size: 10 //  每页几条
+      size: 5 //  每页几条
     }
   },
   created() {
@@ -78,8 +78,30 @@ export default {
   },
   methods: {
     formatData(rows) {
-      const data = rows.map(obj => { return Object.values(obj) })
-      const header = Object.keys(rows[0])
+      // const data = rows.map(obj => { return Object.values(obj) })
+      // const header = Object.keys(rows[0])
+      const enHeader = Object.keys(rows[0])
+      const map = {
+        'id': '编号',
+        'password': '密码',
+        'mobile': '手机号',
+        'username': '姓名',
+        'timeOfEntry': '入职日期',
+        'formOfEmployment': '聘用形式',
+        'correctionTime': '转正日期',
+        'workNumber': '工号',
+        'departmentName': '部门',
+        'staffPhoto': '头像地址'
+      }
+      const header = enHeader.map(en => { return map[en] })
+      // 内容
+      const data = rows.map(obj => {
+        const key = obj['formOfEmployment']
+        obj['formOfEmployment'] = TYPE_MAP[key]
+        return Object.values(obj)
+      })
+      // 英文表头
+      // const header = Object.keys(rows[0])
       return { header, data }
     },
     async daochu() {
@@ -91,7 +113,7 @@ export default {
         excel.export_json_to_excel({
           header, // 表头 必填
           data, // 具体数据 必填
-          filename: 'excel-list', // 文件名称
+          filename: '员工名称', // 文件名称
           autoWidth: true, // 宽度是否自适应
           bookType: 'xlsx' // 生成的文件类型
         })
