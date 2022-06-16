@@ -30,7 +30,7 @@
           <template slot-scope="scope">
             <el-button type="info" round size="mini" @click="$router.push('/employees/detail?id='+ scope.row.id)">查看
             </el-button>
-            <el-button type="primary" round>分配角色</el-button>
+            <el-button type="primary" round @click="hAssignRole(scope.row.id)">分配角色</el-button>
             <el-button type="success" round @click="hDel(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -57,6 +57,9 @@
     >
       <emp-dialog ref="qwe" @success="hsuccess" @quxiao="hquxiao" />
     </el-dialog>
+    <el-dialog :visible.sync="showDialogRole" title="fenpeijuese">
+      <assign-role :cur-id="curId" @quxiao="showDialogRole=false" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -64,25 +67,34 @@ import PageTools from '@/components/PageTools'
 import { delEmployee, getEmployeeList } from '@/api/employees'
 import { TYPE_MAP } from '@/constant'
 import EmpDialog from '@/views/employees/empDialog'
+import assignRole from '@/views/employees/assignRole'
 
 export default {
   components: {
     EmpDialog,
-    PageTools
+    PageTools,
+    assignRole
   },
   data() {
     return {
-      showDialog: false,
+      showDialogRole: false, // 分配权限
+      showDialog: false, // yuangong
       employee: [],
       total: 0,
       page: 1, // 当前页码
-      size: 5 //  每页几条
+      size: 5, //  每页几条
+      curId: ''
     }
   },
   created() {
     this.loadEmployee()
   },
   methods: {
+    // 分配角色
+    hAssignRole(id) {
+      this.showDialogRole = true
+      this.curId = id
+    },
     formatData(rows) {
       // const data = rows.map(obj => { return Object.values(obj) })
       // const header = Object.keys(rows[0])
