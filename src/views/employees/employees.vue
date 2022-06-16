@@ -58,7 +58,7 @@
       <emp-dialog ref="qwe" @success="hsuccess" @quxiao="hquxiao" />
     </el-dialog>
     <el-dialog :visible.sync="showDialogRole" title="fenpeijuese">
-      <assign-role :cur-id="curId" @quxiao="showDialogRole=false" />
+      <assign-role v-if="showDialogRole" :cur-id="curId" @quxiao="showDialogRole=false" />
     </el-dialog>
   </div>
 </template>
