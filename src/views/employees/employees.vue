@@ -11,6 +11,11 @@
       <el-table border :data="employee" :default-sort="{prop:'timeOfEntry'}">
         <el-table-column label="序号" type="index" />
         <el-table-column label="姓名" prop="username" />
+        <el-table-column label="图片" prop="staffPhoto">
+          <template slot-scope="scope">
+            <image-holder :src="scope.row.staffPhoto || ''" />
+          </template>
+        </el-table-column>
         <el-table-column label="工号" prop="workNumber" />
         <el-table-column label="聘用形式" prop="formOfEmployment">
           <template slot-scope="scope">{{

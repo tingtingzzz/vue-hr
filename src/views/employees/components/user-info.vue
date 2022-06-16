@@ -59,7 +59,7 @@ export default {
     // 获取数据
     async loadUserDetailById() {
       const { data: res } = await getUserDetailById(this.$route.query.id)
-      console.log(res)
+      // console.log(res)
       this.userInfo = res
     },
     //  点击更新方法
