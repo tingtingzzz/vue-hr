@@ -1,5 +1,6 @@
 import { login, getUserProfile, userInfo } from '@/api/user'
 import { getToken, setToken } from '@/utils/auth'
+import { resetRouter } from '@/router'
 
 export default {
   namespaced: true,
@@ -34,11 +35,13 @@ export default {
       const obj = { ...res, ...resInfo }
       // 调用mutations
       context.commit('setUserInfo', obj)
+      return res
     },
     // 清空用户信息
     logout(context) {
       context.commit('setToken', '')
       context.commit('setUserInfo', {})
+      resetRouter()
     }
   },
   getter: {}
