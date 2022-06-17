@@ -12,7 +12,8 @@
                 size="small"
                 type="primary"
                 @click="hAdd"
-              >新增角色</el-button>
+              >新增角色
+              </el-button>
             </el-row>
             <!-- 表格 -->
             <el-table :data="roles">
@@ -21,17 +22,19 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="hAssign">分配权限</el-button>
                   <el-button
                     size="small"
                     type="primary"
                     @click="hEdit(scope.row)"
-                  >编辑</el-button>
+                  >编辑
+                  </el-button>
                   <el-button
                     size="small"
                     type="danger"
                     @click="hDel(scope.row.id)"
-                  >删除</el-button>
+                  >删除
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -86,7 +89,23 @@
             size="small"
             type="primary"
             @click="hSubmit"
-          >确定</el-button>
+          >确定
+          </el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :visible.sync="showDialogAssign"
+      title="分配权限"
+    >
+      <assign-permission />
+      <!--      底部-->
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button size="small" @click="showDialogAssign=false">取消</el-button>
+          <el-button size="small" type="primary" @click="queding">确定</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -95,8 +114,11 @@
 
 <script>
 import { addRole, deleteRole, editRole, getRoles } from '@/api/settings'
+import AssignPermission from '@/views/settings/assignPermission'
 
 export default {
+  components: { AssignPermission },
+
   data() {
     return {
       isEdit: false,
@@ -105,6 +127,7 @@ export default {
       page: 1,
       pagesize: 4,
       showDialog: false,
+      showDialogAssign: false,
       roleForm: {
         name: '',
         description: ' '
@@ -119,6 +142,10 @@ export default {
     this.logadRoles()
   },
   methods: {
+    // 点击分配权限
+    hAssign() {
+      this.showDialogAssign = true
+    },
     // 重置表单
     hClose() {
       this.$nextTick(() => {

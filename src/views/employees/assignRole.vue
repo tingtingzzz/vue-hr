@@ -24,7 +24,8 @@ export default {
   props: {
     curId: {
       required: true,
-      type: String
+      type: String,
+      default: ''
     }
   },
   data() {
