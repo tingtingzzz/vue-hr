@@ -22,7 +22,7 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button size="small" type="success" @click="hAssign">分配权限</el-button>
+                  <el-button size="small" type="success" @click="hAssign(scope.row.id)">分配权限</el-button>
                   <el-button
                     size="small"
                     type="primary"
@@ -100,7 +100,7 @@
       :visible.sync="showDialogAssign"
       title="分配权限"
     >
-      <assign-permission />
+      <assign-permission v-if="showDialogAssign" ref="refPerm" :cur-id="curId" @qqq="showDialogAssign=false" />
       <!--      底部-->
       <el-row slot="footer" type="flex" justify="center">
         <el-col :span="6">
@@ -128,6 +128,7 @@ export default {
       pagesize: 4,
       showDialog: false,
       showDialogAssign: false,
+      curId: '',
       roleForm: {
         name: '',
         description: ' '
@@ -142,9 +143,13 @@ export default {
     this.logadRoles()
   },
   methods: {
+    queding() {
+      this.$refs.refPerm.hsave()
+    },
     // 点击分配权限
-    hAssign() {
+    hAssign(id) {
       this.showDialogAssign = true
+      this.curId = id
     },
     // 重置表单
     hClose() {
