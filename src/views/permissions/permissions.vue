@@ -4,7 +4,7 @@
       <!-- 表格 -->
       <el-card>
         <div style="text-align: right; margin-bottom: 20px">
-          <el-button type="primary" size="small" @click="hAdd(1,'0')">添加权限</el-button>
+          <el-button v-allow="'aa'" type="primary" size="small" @click="hAdd(1,'0')">添加权限</el-button>
         </div>
         <el-table border :data="list" row-key="id">
           <el-table-column label="名称" prop="name" />
