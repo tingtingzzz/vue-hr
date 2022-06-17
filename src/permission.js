@@ -1,4 +1,4 @@
-import router from './router'
+import router, { asyncRoutes } from './router'
 import store from './store'
 // import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
@@ -20,9 +20,22 @@ router.beforeEach(async(to, from, next) => {
       // 只有没有userId才发送请求
       const userInfo = store.state.user.userInfo
       if (!userInfo.userId) {
-        await store.dispatch('user/getUserProfile')
+        const res = await store.dispatch('user/getUserProfile')
+        const menu = res.roles.menus
+        const filterRoutes = asyncRoutes.filter(item => {
+          const routerName = item.children[0].name
+          return menu.includes(routerName)
+        })
+        filterRoutes.push({ path: '*', redirect: '/404', hidden: true })
+        router.addRoutes(filterRoutes)
+        store.commit('menu/updateMenuList', filterRoutes)
+        next({
+          ...to,
+          replace: true
+        })
+      } else {
+        next()
       }
-      next()
     }
   } else {
     if (whiteList.includes(to.path)) {
